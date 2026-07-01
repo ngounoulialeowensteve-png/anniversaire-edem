@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Pour toi Edem 💌</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:      #E8A0BF;
+      --rose-deep: #C9607A;
+      --cream:     #FDF6F0;
+      --gold:      #D4A853;
+      --dark:      #2C1A2E;
+      --petal:     #F7D6E0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: var(--cream);
+      font-family: 'Lato', sans-serif;
+      color: var(--dark);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .petals {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .petal {
+      position: absolute;
+      top: -40px;
+      animation: fall linear infinite;
+      opacity: 0.7;
+    }
+    @keyframes fall {
+      0%   { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+
+    .card {
+      position: relative;
+      z-index: 1;
+      background: white;
+      border-radius: 24px;
+      padding: 52px 48px;
+      max-width: 500px;
+      width: 92%;
+      text-align: center;
+      box-shadow: 0 8px 40px rgba(200, 90, 120, 0.13);
+      border: 1.5px solid var(--petal);
+    }
+
+    .heart-icon {
+      font-size: 2.8rem;
+      margin-bottom: 16px;
+      display: block;
+      animation: pulse 1.6s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50%       { transform: scale(1.15); }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--rose-deep);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .subtitle {
+      font-size: 0.95rem;
+      color: #9a7a8a;
+      font-style: italic;
+      margin-bottom: 36px;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .countdown-label {
+      font-size: 0.78rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 18px;
+    }
+    .countdown-grid {
+      display: flex;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 28px;
+    }
+    .time-box {
+      background: var(--petal);
+      border-radius: 14px;
+      padding: 14px 18px;
+      min-width: 68px;
+    }
+    .time-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--rose-deep);
+      line-height: 1;
+    }
+    .time-label {
+      font-size: 0.68rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #b08090;
+      margin-top: 4px;
+    }
+
+    #locked-msg {
+      font-size: 0.88rem;
+      color: #b08090;
+      padding: 16px;
+      border: 1.5px dashed var(--rose);
+      border-radius: 12px;
+      background: #fff5f8;
+    }
+
+    /* Audio section */
+    #audio-section { display: none; }
+
+    .gift-reveal {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      color: var(--dark);
+      margin-bottom: 28px;
+      line-height: 1.8;
+    }
+
+    .play-btn {
+      background: linear-gradient(135deg, var(--rose-deep), var(--rose));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 16px 40px;
+      font-size: 1rem;
+      font-family: 'Lato', sans-serif;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 4px 18px rgba(201, 96, 122, 0.3);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .play-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 24px rgba(201, 96, 122, 0.4);
+    }
+
+    audio {
+      margin-top: 22px;
+      width: 100%;
+      border-radius: 50px;
+    }
+
+    .gold-line {
+      width: 50px;
+      height: 2px;
+      background: var(--gold);
+      margin: 28px auto 0;
+      border-radius: 2px;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="petals" id="petals"></div>
+
+  <div class="card">
+    <span class="heart-icon">💌</span>
+    <h1>Joyeux anniversaire Edem</h1>
+    <p class="subtitle">Un message qui t'attend depuis longtemps…</p>
+
+    <!-- COUNTDOWN -->
+    <div id="countdown-section">
+      <p class="countdown-label">Ton cadeau s'ouvre dans</p>
+      <div class="countdown-grid">
+        <div class="time-box"><div class="time-number" id="days">--</div><div class="time-label">Jours</div></div>
+        <div class="time-box"><div class="time-number" id="hours">--</div><div class="time-label">Heures</div></div>
+        <div class="time-box"><div class="time-number" id="mins">--</div><div class="time-label">Min</div></div>
+        <div class="time-box"><div class="time-number" id="secs">--</div><div class="time-label">Sec</div></div>
+      </div>
+      <p id="locked-msg">🔒 Ce message te sera délivré le <strong>2 juillet</strong> — ton jour spécial ✨</p>
+    </div>
+
+    <!-- AUDIO -->
+    <div id="audio-section">
+      <p class="gift-reveal">
+        Aujourd'hui c'est ton jour 🎂<br/>
+        J'ai quelque chose à te dire…<br/>
+        Appuie sur play 💕
+      </p>
+      <button class="play-btn" id="playBtn" onclick="playAudio()">
+        ▶ &nbsp;Écouter mon message
+      </button>
+      <audio id="myAudio" controls style="display:none;">
+        <source src="message.m4a" type="audio/mp4">
+      </audio>
+    </div>
+
+    <div class="gold-line"></div>
+  </div>
+
+  <script>
+    // Petals
+    const emojis = ['🌸','🌷','🌹','💮','✨','💕'];
+    const container = document.getElementById('petals');
+    for (let i = 0; i < 20; i++) {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      p.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      p.style.left = Math.random() * 100 + 'vw';
+      p.style.animationDuration = (6 + Math.random() * 9) + 's';
+      p.style.animationDelay = (Math.random() * 12) + 's';
+      p.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+      container.appendChild(p);
+    }
+
+    // Countdown to July 2
+    function check() {
+      const now    = new Date();
+      const year   = (now.getMonth() > 6 || (now.getMonth() === 6 && now.getDate() > 2))
+                       ? now.getFullYear() + 1 : now.getFullYear();
+      const target = new Date(year, 6, 2, 0, 0, 0);
+      const diff   = target - now;
+
+      if (diff <= 0) {
+        document.getElementById('countdown-section').style.display = 'none';
+        document.getElementById('audio-section').style.display = 'block';
+        return;
+      }
+
+      const d = Math.floor(diff / 86400000);
+      const h = Math.floor((diff % 86400000) / 3600000);
+      const m = Math.floor((diff % 3600000)  / 60000);
+      const s = Math.floor((diff % 60000)    / 1000);
+
+      document.getElementById('days').textContent  = String(d).padStart(2,'0');
+      document.getElementById('hours').textContent = String(h).padStart(2,'0');
+      document.getElementById('mins').textContent  = String(m).padStart(2,'0');
+      document.getElementById('secs').textContent  = String(s).padStart(2,'0');
+    }
+
+    check();
+    setInterval(check, 1000);
+
+    // Audio
+    function playAudio() {
+      const audio = document.getElementById('myAudio');
+      const btn   = document.getElementById('playBtn');
+      audio.style.display = 'block';
+      audio.play();
+      btn.style.display = 'none';
+    }
+  </script>
+</body>
+</html>
